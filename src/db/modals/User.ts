@@ -28,7 +28,7 @@ UserSchema.methods.comparePassword = async function (
   return isMatch;
 };
 
-UserSchema.methods.createJWT = async function () {
+UserSchema.methods.createJWT = function () {
   const token = jwt.sign(
     { userId: this._id, email: this.email },
     process.env.JWT_SECRET,
