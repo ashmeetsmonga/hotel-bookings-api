@@ -11,7 +11,8 @@ export const registerUser = async (req: Request, res: Response) => {
     return res.status(400).json({ msg: "User with email already exists" });
 
   const newUser = await UserModel.create({ email, password });
-  return res.status(201).json(newUser);
+  const token = newUser.createJWT();
+  return res.status(201).json({ newUser, token });
 };
 
 export const loginUser = async (req: Request, res: Response) => {
@@ -26,5 +27,6 @@ export const loginUser = async (req: Request, res: Response) => {
   if (!isPasswordCorrect)
     return res.status(404).json({ msg: "Invalid credentials" });
 
-  return res.status(200).json(user);
+  const token = user.createJWT();
+  return res.status(200).json({ user, token });
 };

@@ -1,11 +1,13 @@
 import { NextFunction } from "express";
 import mongoose from "mongoose";
 import bcryptjs from "bcryptjs";
+import * as jwt from "jsonwebtoken";
 
 interface IUser {
   email: string;
   password: string;
   comparePassword: (candidatePassword: string) => Promise<boolean>;
+  createJWT: () => string;
 }
 
 const UserSchema = new mongoose.Schema<IUser>({
@@ -24,6 +26,15 @@ UserSchema.methods.comparePassword = async function (
 ) {
   const isMatch = await bcryptjs.compare(candidatePassword, this.password);
   return isMatch;
+};
+
+UserSchema.methods.createJWT = async function () {
+  const token = jwt.sign(
+    { userId: this._id, email: this.email },
+    process.env.JWT_SECRET,
+    { expiresIn: "30d" }
+  );
+  return token;
 };
 
 export const UserModel = mongoose.model("User", UserSchema);
