@@ -9,10 +9,7 @@ export const getHotels = async (req: Request, res: Response) => {
 
 export const createHotel = async (req: JWTRequest, res: Response) => {
   const { name, city, state, country, zipCode, noOfRooms } = req.body;
-  if (!name || !city || !state || !country || !zipCode || !noOfRooms)
-    return res.status(400).json({
-      msg: "Please provide name, city, state, country, zipCode & noOfRooms",
-    });
+  if (!name || !city || !state || !country || !zipCode || !noOfRooms) return res.status(400).json({ msg: "Please provide name, city, state, country, zipCode & noOfRooms" });
 
   const hotel = await HotelModel.findOne({ name });
   if (hotel) return res.status(400).json({ msg: "Hotel with provided name already exists" });
