@@ -7,6 +7,7 @@ const HotelSchema = new mongoose.Schema({
   country: { type: String, required: true },
   zipCode: { type: Intl, required: true },
   noOfRooms: { type: Intl, required: true },
+  createdBy: { type: String, required: true },
 });
 
 export const HotelModel = mongoose.model("Hotel", HotelSchema);

@@ -1,3 +1,4 @@
+import { JWTRequest } from "types";
 import { HotelModel } from "../db/modals/Hotel";
 import { Request, Response } from "express";
 
@@ -6,16 +7,16 @@ export const getHotels = async (req: Request, res: Response) => {
   return res.status(200).json(hotels);
 };
 
-export const createHotel = async (req: Request, res: Response) => {
+export const createHotel = async (req: JWTRequest, res: Response) => {
   const { name, city, state, country, zipCode, noOfRooms } = req.body;
   if (!name || !city || !state || !country || !zipCode || !noOfRooms)
     return res.status(400).json({
       msg: "Please provide name, city, state, country, zipCode & noOfRooms",
     });
 
-  const hotel = await HotelModel.find({ where: { name } });
+  const hotel = await HotelModel.findOne({ name });
   if (hotel) return res.status(400).json({ msg: "Hotel with provided name already exists" });
 
-  const newHotel = await HotelModel.create({ name, city, state, country, zipCode, noOfRooms });
+  const newHotel = await HotelModel.create({ name, city, state, country, zipCode, noOfRooms, createdBy: req.userId });
   return res.status(201).json(newHotel);
 };
