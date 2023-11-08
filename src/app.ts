@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import express, { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import userRouter from "./routes/userRoutes";
 import hotelRouter from "./routes/hotelRoutes";
+import roomRouter from "./routes/roomRoutes";
 
 dotenv.config();
 const app = express();
@@ -12,6 +13,7 @@ const app = express();
 app.use(express.json());
 app.use("/user", userRouter);
 app.use("/hotel", hotelRouter);
+app.use("/room", roomRouter);
 
 app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFunction) => {
   console.log(err);
